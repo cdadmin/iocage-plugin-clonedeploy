@@ -7,10 +7,11 @@ sysrc -f /etc/rc.conf samba_server_enable="YES"
 sysrc -f /etc/rc.conf tftpd_enable="YES"
 
 # Start the services
-service mysql-server start 2>/dev/null
-service apache24 start 2>/dev/null
-service samba_server start 2> /dev/null
-service tftpd start 2> /dev/null
+echo "Starting Services"
+service mysql-server start 
+service apache24 start 
+service samba_server 
+service tftpd start 
 
 # Set Global
 export LC_ALL=C
