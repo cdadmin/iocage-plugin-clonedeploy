@@ -21,8 +21,8 @@ mkdir /usr/local/www/apache24/data/clonedeploy
 cp -r frontend /usr/local/www/apache24/data/clonedeploy
 cp -r api /usr/local/www/apache24/data/clonedeploy
 mkdir /.mono
-sed -i "s/xx_marker1_xx/$sql_pass/" /usr/local/www/apache24/data/clonedeploy/api/Web.config
-sed -i "s/xx_marker2_xx/$rand_key/" /usr/local/www/apache24/data/clonedeploy/api/Web.config
+sed -i "" "s/xx_marker1_xx/$sql_pass/" /usr/local/www/apache24/data/clonedeploy/api/Web.config
+sed -i "" "s/xx_marker2_xx/$rand_key/" /usr/local/www/apache24/data/clonedeploy/api/Web.config
 
 # Setup Tftp
 cp -r tftpboot /
