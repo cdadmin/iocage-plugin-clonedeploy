@@ -7,11 +7,7 @@ sysrc -f /etc/rc.conf samba_server_enable="YES"
 sysrc -f /etc/rc.conf tftpd_enable="YES"
 
 # Start the services
-echo "Starting Services"
 service mysql-server start 
-service apache24 start 
-service samba_server 
-service tftpd start 
 
 # Set Global
 export LC_ALL=C
@@ -72,6 +68,7 @@ chown -R www:www /tftpboot /cd_dp /usr/local/www/apache24/data/clonedeploy /.mon
 chmod 1777 /tmp
 chown -R www:cdsharewriters /cd_dp
 chmod -R 2775 /cd_dp
+chmod 555 /usr/local/etc/rc.d/tftpd
 
 # Restart services
 service mysql-server restart 2>/dev/null
