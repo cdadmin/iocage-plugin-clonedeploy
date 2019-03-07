@@ -42,6 +42,11 @@ mysql -u root --password=${sql_pass} -e  "GRANT ALL PRIVILEGES ON *.* TO 'root'@
 chown -R www:www /tftpboot /cd_dp /usr/local/www/apache24/data/clonedeploy /.mono
 chmod 1777 /tmp
 
+# make udpcast
+cd /usr/ports/net/udpcast
+make
+make install
+
 # Restart services
 service mysql-server restart 2>/dev/null
 service apache24 restart 2>/dev/null
