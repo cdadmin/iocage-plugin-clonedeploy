@@ -36,7 +36,7 @@ ln -s ../../kernels /tftpboot/proxy/efi64/kernels
 #Setup Database
 mysqladmin -u root create clonedeploy
 mysqladmin -u root password ${sql_pass}
-mysql -u root --password=${sql_pass} clonedeploy < /root/clonedeploy/cd.sql
+mysql -u root --password=${sql_pass} clonedeploy < /clonedeploy/cd.sql
 mysql -u root --password=${sql_pass} -e  "GRANT ALL PRIVILEGES ON *.* TO 'root'@'127.0.0.1' identified by '${sql_pass}';flush privileges;"
 
 #Setup SMB
