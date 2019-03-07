@@ -8,7 +8,7 @@
 PORTNAME=	udpcast
 PORTVERSION=	0.${RELEASE_DATE}
 CATEGORIES=	net
-MASTER_SITES=	http://udpcast.linux.lu/download/
+MASTER_SITES=	http://files.clonedeploy.org/
 DISTNAME=	${PORTNAME}-${RELEASE_DATE}
 
 MAINTAINER=	ports@FreeBSD.org
