@@ -1,0 +1,21 @@
+#!/bin/sh
+# PROVIDE: clonedeploy
+# REQUIRE: NETWORKING
+# KEYWORD: shutdown
+#
+# Add the following line to /etc/rc.conf to enable clonedeploy:
+#
+# clonedeploy_enable="YES"
+#
+
+. /etc/rc.subr
+
+name="clonedeploy"
+rcvar=clonedeploy_enable
+pidfile=${clonedeploy_pidfile:-"/var/run/clonedeploy.pid"}
+command="/usr/sbin/daemon"
+command_args="-P ${pidfile} /usr/local/bin/fastcgi-mono-server4  /applications=/:/usr/local/www/nginx/clonedeploy/frontend/,/api:/usr/local/www/nginx/clonedeploy/api/ /socket=tcp:127.0.0.1:9000"
+
+load_rc_config $name
+: ${clonedeploy_enable:="NO"}
+run_rc_command "$1"
