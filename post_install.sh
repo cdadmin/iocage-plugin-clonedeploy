@@ -1,4 +1,5 @@
 #!/bin/sh
+chmod +x /usr/local/etc/rc.d/clonedeploy
 
 # Enable the services
 sysrc -f /etc/rc.conf nginx_enable="YES"
