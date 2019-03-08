@@ -1,4 +1,13 @@
 #!/bin/sh
+
+# Set Global
+export LC_ALL=C
+FILE_NAME="clonedeploy-freenas-1.4.0.tar.gz"
+EXPECTED_HASH=ebcb65f41c6697654d92a968d1b4b21afc36f5cf542d076886b80992164a8afd
+sql_pass=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
+rand_key=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
+
+# make clonedeploy startup script executable
 chmod +x /usr/local/etc/rc.d/clonedeploy
 
 # Enable the services
@@ -6,21 +15,33 @@ sysrc -f /etc/rc.conf nginx_enable="YES"
 sysrc -f /etc/rc.conf mysql_enable="YES"
 sysrc -f /etc/rc.conf clonedeploy_enable="YES"
 
-# Start the services
+# Start mariadb, others are started at the end
 service mysql-server start 
 
-# Set Global
-export LC_ALL=C
-sql_pass=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
-rand_key=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
+# install web application, try 2 mirrors
+if ! wget -q "https://sourceforge.net/projects/clonedeploy/files/CloneDeploy 1.4.0/${FILE_NAME}"; then
+  echo "Could not retrieve CloneDeploy from Sourceforge, attempting download from clonedeploy.org"
+  if ! wget -q "http://files.clonedeploy.org/${FILE_NAME}"; then
+    echo "Could not retrieve CloneDeploy from clonedeploy.org, exiting."
+	exit 1
+  fi
+fi
 
-wget "https://sourceforge.net/projects/clonedeploy/files/CloneDeploy 1.4.0/clonedeploy-1.4.0.tar.gz"
-tar xvzf clonedeploy-1.4.0.tar.gz
+ACTUAL_HASH=`sha256 {$FILE_NAME} | awk '{print $4}'`
+if [ ${EXPECTED_HASH} != ${ACTUAL_HASH} ]; then
+  echo "File Hash Mismatch.  Exiting."
+  exit 1
+fi
+
+tar xvzf ${FILE_NAME}
 cd clonedeploy
 mkdir /usr/local/www/nginx/clonedeploy
 cp -r frontend /usr/local/www/nginx/clonedeploy
 cp -r api /usr/local/www/nginx/clonedeploy
 mkdir /.mono
+mkdir /cd_dp
+mkdir /cd_dp/images
+mkdir /cd_dp/resources
 sed -i "" "s/xx_marker1_xx/$sql_pass/" /usr/local/www/nginx/clonedeploy/api/Web.config
 sed -i "" "s/xx_marker2_xx/$rand_key/" /usr/local/www/nginx/clonedeploy/api/Web.config
 echo "Local,http://localhost/" > /usr/local/www/nginx/clonedeploy/frontend/serverlist.csv
@@ -41,7 +62,7 @@ mysql -u root --password=${sql_pass} clonedeploy < /clonedeploy/cd.sql
 mysql -u root --password=${sql_pass} -e  "GRANT ALL PRIVILEGES ON *.* TO 'root'@'127.0.0.1' identified by '${sql_pass}';flush privileges;"
 
 # Set permissions
-chown -R www:www /tftpboot /cd_dp /usr/local/www/nginx/clonedeploy /.mono
+chown -R www:www /tftpboot /cd_dp /usr/local/www/nginx/clonedeploy /.mono /cd_dp
 chmod 1777 /tmp
 
 # make udpcast
