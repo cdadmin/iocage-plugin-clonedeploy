@@ -3,7 +3,7 @@
 # Set Global
 export LC_ALL=C
 FILE_NAME="clonedeploy-freenas-1.4.0.tar.gz"
-EXPECTED_HASH="04858b3079e05a954b283da126dd31d557f4c419d4fc05801b13cbd3db1e36d5"
+EXPECTED_HASH="04858b3079e05a954b283da126dd31d557f4c419d4fc05801b13cbd3db1e36d59"
 SQL_PASS=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
 RAND_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
 
@@ -66,7 +66,6 @@ ln -s ../../kernels /tftpboot/proxy/efi64/kernels
 mysqladmin -u root create clonedeploy 
 mysqladmin -u root password ${SQL_PASS} 
 mysql -u root --password=${SQL_PASS} clonedeploy < /clonedeploy/cd.sql 
-#mysql -u root --password=${SQL_PASS} -e  "GRANT ALL PRIVILEGES ON *.* TO 'root'@'127.0.0.1' identified by '${SQL_PASS}';flush privileges;"
 
 
 # Set permissions
