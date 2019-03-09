@@ -45,8 +45,6 @@ cp -r frontend /usr/local/www/nginx/clonedeploy
 cp -r api /usr/local/www/nginx/clonedeploy 
 mkdir /.mono 
 mkdir /cd_dp 
-mkdir /cd_dp/images 
-mkdir /cd_dp/resources 
 sed -i "" "s/xx_marker1_xx/$SQL_PASS/" /usr/local/www/nginx/clonedeploy/api/Web.config 
 sed -i "" "s/xx_marker2_xx/$RAND_KEY/" /usr/local/www/nginx/clonedeploy/api/Web.config 
 echo "Local,http://localhost/" > /usr/local/www/nginx/clonedeploy/frontend/serverlist.csv 
