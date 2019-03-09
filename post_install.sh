@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # Set Global
+echo "" &>>log
 export LC_ALL=C
 FILE_NAME="clonedeploy-freenas-1.4.0.tar.gz"
 EXPECTED_HASH="04858b3079e05a954b283da126dd31d557f4c419d4fc05801b13cbd3db1e36d59"
@@ -24,9 +25,9 @@ service mysql-server start
 
 # download clonedeploy, try 2 mirrors
 if ! wget -q "https://sourceforge.net/projects/clonedeploy/files/CloneDeploy 1.4.0/${FILE_NAME}"; then
-  echo "Could not retrieve CloneDeploy from Sourceforge, trying clonedeploy.org" &>log
+  echo "Could not retrieve CloneDeploy from Sourceforge, trying clonedeploy.org" &>>log
   if ! wget -q "http://files.clonedeploy.org/${FILE_NAME}"; then
-    echo "Could not retrieve CloneDeploy from clonedeploy.org, exiting." &>log
+    echo "Could not retrieve CloneDeploy from clonedeploy.org, exiting." &>>log
 	exit 1
   fi
 fi
@@ -35,10 +36,10 @@ fi
 # verify hash
 ACTUAL_HASH=`sha256 /${FILE_NAME} | awk '{print $4}'`
 if [ ${EXPECTED_HASH} != ${ACTUAL_HASH} ]; then
-  echo "File hash mismatch." &>log
-  echo "Actual: ${ACTUAL_HASH}" &>log
-  echo "Expected: ${EXPECTED_HASH}" &>log
-  echo "Exiting." &>log
+  echo "File hash mismatch." &>>log
+  echo "Actual: ${ACTUAL_HASH}" &>>log
+  echo "Expected: ${EXPECTED_HASH}" &>>log
+  echo "Exiting." &>>log
   exit 1
 fi
 
