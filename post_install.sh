@@ -24,9 +24,9 @@ service mysql-server start
 
 # download clonedeploy, try 2 mirrors
 if ! wget -q "https://sourceforge.net/projects/clonedeploy/files/CloneDeploy 1.4.0/${FILE_NAME}"; then
-  echo "Could not retrieve CloneDeploy from Sourceforge, trying clonedeploy.org" 2>log
+  echo "Could not retrieve CloneDeploy from Sourceforge, trying clonedeploy.org" &>log
   if ! wget -q "http://files.clonedeploy.org/${FILE_NAME}"; then
-    echo "Could not retrieve CloneDeploy from clonedeploy.org, exiting." 2>log
+    echo "Could not retrieve CloneDeploy from clonedeploy.org, exiting." &>log
 	exit 1
   fi
 fi
@@ -35,10 +35,10 @@ fi
 # verify hash
 ACTUAL_HASH=`sha256 /${FILE_NAME} | awk '{print $4}'`
 if [ ${EXPECTED_HASH} != ${ACTUAL_HASH} ]; then
-  echo "File hash mismatch." 2>log
-  echo "Actual: ${ACTUAL_HASH}" 2>log
-  echo "Expected: ${EXPECTED_HASH}" 2>log
-  echo "Exiting." 2>log
+  echo "File hash mismatch." &>log
+  echo "Actual: ${ACTUAL_HASH}" &>log
+  echo "Expected: ${EXPECTED_HASH}" &>log
+  echo "Exiting." &>log
   exit 1
 fi
 
